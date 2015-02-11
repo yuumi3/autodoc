@@ -211,6 +211,15 @@ module Autodoc
       WeakParameters.stats[controller][action].try(:validators)
     end
 
+    def method_missing(name, *args)
+      if name.to_s =~ /^_/
+        @context.respond_to?(name) ? @context.send(name).strip_heredoc : ""
+      else
+        super
+      end
+    end
+
+
     class Parameter
       attr_reader :validator
 
