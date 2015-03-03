@@ -21,7 +21,10 @@ module Autodoc
     def write_documents
       @table.each do |pathname, documents|
         pathname.parent.mkpath
-        pathname.open("w") {|file| file << documents.map(&:render).join("\n").rstrip + "\n" }
+        pathname.open("w") do |file|
+         file << render_header if Autodoc.configuration.header
+         file << documents.map(&:render).join("\n").rstrip + "\n"
+        end
       end
     end
 
@@ -32,6 +35,10 @@ module Autodoc
 
     def render_toc
       ERB.new(Autodoc.configuration.toc_template, nil, "-").result(binding)
+    end
+
+    def render_header
+      ERB.new(Autodoc.configuration.header_template, nil, "-").result(binding)
     end
 
     def toc_path

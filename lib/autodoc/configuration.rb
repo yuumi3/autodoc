@@ -38,6 +38,14 @@ module Autodoc
       false
     end
 
+    property :header_template do
+      File.read(File.expand_path("../templates/header.md.erb", __FILE__))
+    end
+
+    property :header do
+      false
+    end
+
     def pathname
       Pathname.new(path)
     end
