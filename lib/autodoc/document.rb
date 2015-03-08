@@ -154,7 +154,11 @@ module Autodoc
           if response.header["Content-Type"].try(:include?, "application/json")
             response_body_parsed_as_json
           else
-            response.body
+            if response.body.encoding == Encoding::ASCII_8BIT
+              "* binary #{response.body.size}byte *"
+            else
+              response.body
+            end
           end
         end
       end
